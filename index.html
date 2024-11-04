@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator App</title>
+
+  
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function Calculator() {
+      const [input, setInput] = React.useState("");
+      const [result, setResult] = React.useState("");
+
+      const handleClick = (value) => {
+        if (value === "=") {
+          try {
+            const calculatedResult = Function("return " + input)();
+            setResult(calculatedResult.toString());
+          } catch (error) { 
+            setResult("Error");
+          }
+        } else if (value === "C") {
+          setInput("");
+          setResult("");
+        } else {
+          setInput((prevInput) => prevInput + value);
+        }
+      };
+
+      return (
+        <div style={{ textAlign: 'center', fontSize: '1.5em', maxWidth: '200px', margin: '20px auto' }}>
+          <div style={{ minHeight: '2em', marginBottom: '10px', border: '1px solid #ddd', padding: '10px' }}>
+            {result || input || "0"}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+            {["7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", "C", "=", "+"].map((button) => (
+              <button key={button} onClick={() => handleClick(button)} style={{ padding: '10px', fontSize: '1em' }}>
+                {button}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<Calculator />, document.getElementById('root'));
+  </script>
+</body>
+</html>
